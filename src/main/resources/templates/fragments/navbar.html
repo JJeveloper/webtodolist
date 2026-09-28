@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<header th:fragment="navbar"
+        class="top-navbar">
+
+    <div class="search-box">
+
+        <i class="bi bi-search"></i>
+
+        <input type="text"
+               placeholder="Buscar...">
+
+    </div>
+
+
+    <div class="navbar-user">
+
+        <span class="d-none d-md-inline">
+
+            <i class="bi bi-person"></i>
+
+            <span th:text="${#authentication.name}">
+                Usuario
+            </span>
+
+        </span>
+
+
+        <button class="icon-button">
+
+            <i class="bi bi-gear"></i>
+
+        </button>
+
+
+        <button class="icon-button">
+
+            <i class="bi bi-bell"></i>
+
+        </button>
+
+    </div>
+
+</header>
+
+</body>
+</html>

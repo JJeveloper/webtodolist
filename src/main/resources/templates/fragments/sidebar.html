@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<aside th:fragment="sidebar" class="sidebar">
+
+    <!-- LOGO -->
+
+    <div class="sidebar-logo">
+
+        <div class="logo-icon">
+
+            <i class="bi bi-check2-square"></i>
+
+        </div>
+
+        <span>
+            WebTodoList
+        </span>
+
+    </div>
+
+
+    <!-- MENÚ -->
+
+    <nav class="sidebar-menu">
+
+        <small class="menu-title">
+            MENÚ PRINCIPAL
+        </small>
+
+
+        <a href="/dashboard" class="sidebar-link active">
+
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>
+                Dashboard
+            </span>
+        </a>
+
+
+        <a href="/tareas" class="sidebar-link">
+
+            <i class="bi bi-list-task"></i>
+
+            <span>
+                Mis tareas
+            </span>
+
+        </a>
+
+
+        <a href="/tareas/publicas"
+           class="sidebar-link">
+
+            <i class="bi bi-globe2"></i>
+
+            <span>
+                Tareas públicas
+            </span>
+
+        </a>
+
+
+        <a href="/seguimiento"
+           class="sidebar-link">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            <span>
+                Seguimiento
+            </span>
+
+        </a>
+
+
+        <small class="menu-title mt-4">
+            CUENTA
+        </small>
+
+
+        <a href="/perfil"
+           class="sidebar-link">
+
+            <i class="bi bi-person"></i>
+
+            <span>
+                Mi perfil
+            </span>
+
+        </a>
+
+
+        <form th:action="@{/logout}"
+              method="post">
+
+            <button type="submit"
+                    class="sidebar-link logout-button">
+
+                <i class="bi bi-box-arrow-right"></i>
+
+                <span>
+                    Cerrar sesión
+                </span>
+
+            </button>
+
+        </form>
+
+    </nav>
+
+</aside>
+
+</body>
+</html>

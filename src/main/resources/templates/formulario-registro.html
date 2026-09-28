@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+</head>
+<body>
+
+<section class="bg-light py-3 py-md-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                <div class="card border border-light-subtle rounded-3 shadow-sm">
+                    <div class="card-body p-3 p-md-4 p-xl-5">
+
+                        <h2 class="fs-6 fw-normal text-center text-secondary mb-4">REGISTRO</h2>
+                        <form th:action="@{/guardarusuario}" th:object="${registroU}" method="post">
+                            <div class="row gy-2 overflow-hidden">
+
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" th:field="*{identificacion}"
+                                               name="username"
+                                               id="identificacion" placeholder="1047854784" required>
+                                        <label for="identificacion" class="form-label">Identificacion</label>
+                                        <div class="text-danger" th:errors="*{identificacion}"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" name="nombres" th:field="*{nombres}"
+                                               id="nombres" placeholder="Brad Fernandez" required>
+                                        <label for="nombres" class="form-label">Nombres</label>
+                                        <div class="text-danger" th:errors="*{nombres}"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="password" class="form-control" name="contrasena" id="contrasena"
+                                               th:field="*{contrasena}"
+                                               placeholder="Password" required>
+                                        <label for="contrasena" class="form-label">Password</label>
+                                        <div class="text-danger" th:errors="*{contrasena}"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="password" class="form-control" name="confirmarpassword"
+                                               id="confirmarpassword"
+                                               value="" placeholder="Password" required>
+                                        <label for="confirmarpassword" class="form-label">Confirmar Password</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="d-grid my-3">
+                                        <button class="btn btn-primary btn-lg" type="submit">Registrate</button>
+                                    </div>
+                                    <div class="col-12">
+                                        <p class="m-0 text-secondary text-center">Volver a Inicio
+                                            <a th:href="@{/login}" class="link-primary text-decoration-none">click
+                                                aqui</a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    setTimeout(() => {
+        const mensajesError = document.querySelectorAll('.text-danger');
+
+        mensajesError.forEach(mensaje => {
+            mensaje.style.transition = 'opacity 0.5s ease';
+            mensaje.style.opacity = '0';
+
+            setTimeout(() => {
+                mensaje.remove();
+            }, 500);
+        });
+    }, 5000);
+</script>
+
+</body>
+</html>
