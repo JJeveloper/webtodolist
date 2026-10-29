@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "seguimientotareas")
-public class Seguimientotarea {
+public class SeguimientoTarea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idseguimientotareas", nullable = false)

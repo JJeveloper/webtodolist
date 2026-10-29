@@ -33,16 +33,11 @@ public class RegistroController {
                                BindingResult bindingResult,
                                RedirectAttributes redirectAttributes) {
 
-        System.out.println("00000000");
-
         if (bindingResult.hasErrors()) {
-            System.out.println("LOOO " + bindingResult.getAllErrors());
             return "formulario-registro";
         }
 
         usuarioService.registrarUsuario(registrarUsuarioDTO);
-
-        System.out.println("1111111");
 
         redirectAttributes.addFlashAttribute(
                 "success",

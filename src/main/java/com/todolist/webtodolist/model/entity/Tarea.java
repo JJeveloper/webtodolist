@@ -16,10 +16,15 @@ public class Tarea {
     @Column(name = "idtareas", nullable = false)
     private Integer id;
 
+    @Size(max = 500)
+    @NotNull
+    @Column(name = "tarea", nullable = false, length = 500)
+    private String tarea;
+
     @Size(max = 3000)
     @NotNull
-    @Column(name = "tarea", nullable = false, length = 3000)
-    private String tarea;
+    @Column(name = "descripcion", nullable = false, length = 3000)
+    private String descripcion;
 
     @NotNull
     @Column(name = "fechainicio", nullable = false)
@@ -31,7 +36,6 @@ public class Tarea {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Lob
     @Column(name = "visibilidad", nullable = false)
     private Visibilidad visibilidad;
 
@@ -43,8 +47,9 @@ public class Tarea {
     @OneToMany(mappedBy = "tarea")
     private List<Comentario> comentarios = new ArrayList<>();
 
-    @OneToMany(mappedBy = "tarea")
-    private List<Seguimientotarea> seguimientotareas = new ArrayList<>();
+    @OneToMany(mappedBy = "tarea", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SeguimientoTarea> seguimientoTareas = new ArrayList<>();
+
 
     public Integer getId() {
         return id;
@@ -102,11 +107,19 @@ public class Tarea {
         this.comentarios = comentarios;
     }
 
-    public List<Seguimientotarea> getSeguimientotareas() {
-        return seguimientotareas;
+    public List<SeguimientoTarea> getSeguimientotareas() {
+        return seguimientoTareas;
     }
 
-    public void setSeguimientotareas(List<Seguimientotarea> seguimientotareas) {
-        this.seguimientotareas = seguimientotareas;
+    public void setSeguimientotareas(List<SeguimientoTarea> seguimientoTareas) {
+        this.seguimientoTareas = seguimientoTareas;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

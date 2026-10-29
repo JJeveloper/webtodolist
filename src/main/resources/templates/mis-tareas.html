@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mis tareas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <!-- =====================================
+         SIDEBAR
+    ====================================== -->
+
+    <div th:replace="~{fragments/sidebar :: sidebar}">
+    </div>
+
+    <!-- =====================================
+         CONTENIDO PRINCIPAL
+    ====================================== -->
+
+    <div class="main-content">
+
+        <!-- =====================================
+             CONTENIDO
+        ====================================== -->
+
+        <main class="content">
+
+            <!-- =====================================
+                 ENCABEZADO
+            ====================================== -->
+
+            <div class="page-header">
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+
+                        <small class="text-muted">
+                            Tareas / Mis tareas
+                        </small>
+
+                        <h4 class="fw-bold mt-1">
+                            Mis tareas
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            Administra y realiza seguimiento de tus tareas.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Mensaje de error -->
+            <div th:if="${successDelete}"
+                 class="alert alert-warning alert-dismissible fade show"
+                 role="alert">
+
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+                <span th:text="${successDelete}">
+                    Tarea eliminada
+                </span>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Cerrar">
+                </button>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div th:if="${errorDelete}"
+                 class="alert alert-warning alert-dismissible fade show"
+                 role="alert">
+
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+                <span th:text="${errorDelete}">
+                    error
+                </span>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Cerrar">
+                </button>
+            </div>
+
+            <div class="soft-card mb-4">
+
+                <div class="card-title">
+
+                    <div>
+
+                        <h5>
+                            Mis tareas
+                        </h5>
+
+                        <small class="text-muted">
+                            Busca y filtra tus tareas
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row g-3">
+
+
+                    <!-- BUSCAR -->
+
+                    <div class="col-lg-5">
+
+                        <label class="form-label">
+                            Buscar
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text bg-white">
+
+                                <i class="bi bi-search"></i>
+
+                            </span>
+
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="Buscar por título...">
+                        </div>
+
+                    </div>
+
+
+                    <!-- ESTADO -->
+
+                    <div class="col-lg-3">
+
+                        <label class="form-label">
+                            Estado
+                        </label>
+
+                        <select class="form-select">
+
+                            <option selected>
+                                Todos
+                            </option>
+
+                            <option>
+                                Pendiente
+                            </option>
+
+                            <option>
+                                En progreso
+                            </option>
+
+                            <option>
+                                Completada
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- VISIBILIDAD -->
+
+                    <div class="col-lg-2">
+
+                        <label class="form-label">
+                            Visibilidad
+                        </label>
+
+                        <select class="form-select">
+
+                            <option selected>
+                                Todas
+                            </option>
+
+                            <option>
+                                Pública
+                            </option>
+
+                            <option>
+                                Privada
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ORDEN -->
+
+                    <div class="col-lg-2">
+                        <label class="form-label">Ordenar</label>
+
+                        <select class="form-select">
+                            <option selected>Más recientes</option>
+                            <option>Fecha de inicio</option>
+                            <option>Fecha de finalización</option>
+                            <option>Mayor progreso</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- =====================================
+                 LISTA DE TAREAS
+            ====================================== -->
+
+            <div class="row g-4">
+
+                <!-- =====================================
+                     TAREA
+                ====================================== -->
+
+                <div class="col-xl-4 col-lg-6"
+                     th:each="tarea : ${tarea}">
+
+
+                    <div class="task-card">
+
+
+                        <!-- CABECERA -->
+
+                        <div class="task-header">
+
+
+                            <div class="task-title-container">
+
+
+                                <div class="task-icon">
+
+                                    <i class="bi bi-book"></i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <h5 class="task-title"
+                                        th:text="${tarea.tarea}">
+
+                                        Estudiar Spring Security
+
+                                    </h5>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- VISIBILIDAD -->
+
+                            <span class="task-badge private"
+                                  th:if="${tarea.visibilidad.name() == 'PRIVADA'}">
+
+                                <i class="bi bi-lock-fill"></i>
+
+                                Privada
+
+                            </span>
+
+
+                            <span class="task-badge public"
+                                  th:if="${tarea.visibilidad.name() == 'PUBLICA'}">
+
+                                <i class="bi bi-globe2"></i>
+
+                                Pública
+
+                            </span>
+
+                        </div>
+
+                        <!-- DESCRIPCIÓN -->
+
+                        <p class="task-description"
+                           th:text="${tarea.descripcion}">
+
+                            Terminar el módulo de autenticación JWT
+
+                        </p>
+
+
+                        <!-- FECHAS -->
+
+                        <div class="task-dates">
+
+
+                            <div class="task-date">
+
+                                <i class="bi bi-calendar-event"></i>
+
+                                <div>
+
+                                    <small>
+                                        Inicio
+                                    </small>
+
+                                    <span th:text="${tarea.fechainicio}">
+                                        01 Oct 2026
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="task-date">
+
+                                <i class="bi bi-calendar-check"></i>
+
+                                <div>
+
+                                    <small> Fin
+                                    </small>
+
+                                    <span th:text="${tarea.fechaFin}">
+                                        10 Oct 2026
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PROGRESO -->
+
+                        <div class="task-progress">
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Progreso</span>
+                                <strong th:text="${tarea.progreso + '%'}">70%</strong>
+                            </div>
+
+
+                            <div class="progress">
+
+                                <div class="progress-bar"
+                                     role="progressbar"
+                                     th:style="'width:' + ${tarea.progreso} + '%;'"
+
+                                     th:aria-valuenow="${tarea.progreso}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- ESTADO -->
+
+                            <div class="task-status">
+
+                                <span class="status-dot"></span>
+                                <span th:text="${tarea.estado}">
+                                 En progreso
+                            </span>
+
+                            </div>
+
+
+                            <!-- BOTONES -->
+
+                            <div class="task-actions d-flex gap-2">
+
+                                <a th:href="@{/detalle-tarea/{id}(id=${tarea.id})}"
+                                   class="btn btn-task-view">
+                                    Ver detalles
+                                </a>
+
+                                <!-- Eliminar tarea -->
+                                <form th:action="@{/eliminar-tarea/{id}(id=${tarea.id})}"
+                                      method="post"
+                                      class="m-0"
+                                      onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer.');">
+
+                                    <button type="submit" class="btn btn-outline-danger">
+                                        <i class="bi bi-trash me-1"></i>
+                                        Eliminar
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        </main>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

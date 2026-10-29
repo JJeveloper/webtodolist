@@ -21,7 +21,6 @@
 
     </div>
 
-
     <!-- MENÚ -->
 
     <nav class="sidebar-menu">
@@ -32,16 +31,22 @@
 
 
         <a href="/dashboard" class="sidebar-link active">
-
             <i class="bi bi-grid-1x2-fill"></i>
             <span>
                 Dashboard
             </span>
         </a>
 
+        <a th:href="@{/agregartarea}" class="sidebar-link">
+            <i class="bi bi-plus-circle-dotted"></i>
 
-        <a href="/tareas" class="sidebar-link">
+            <span>
+                Agregar tarea
+            </span>
 
+        </a>
+
+        <a th:href="@{/mostrarmistareas}" class="sidebar-link">
             <i class="bi bi-list-task"></i>
 
             <span>
@@ -50,10 +55,7 @@
 
         </a>
 
-
-        <a href="/tareas/publicas"
-           class="sidebar-link">
-
+        <a href="/tareas/publicas" class="sidebar-link">
             <i class="bi bi-globe2"></i>
 
             <span>
@@ -65,7 +67,6 @@
 
         <a href="/seguimiento"
            class="sidebar-link">
-
             <i class="bi bi-bar-chart-line"></i>
 
             <span>
@@ -73,7 +74,6 @@
             </span>
 
         </a>
-
 
         <small class="menu-title mt-4">
             CUENTA
@@ -86,7 +86,9 @@
             <i class="bi bi-person"></i>
 
             <span>
-                Mi perfil
+                Mi perfil:
+                <span th:text="${#authentication.name}"> Usuario </span>
+
             </span>
 
         </a>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tarea</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/administrar-tarea.css}">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <!-- =====================================
+         SIDEBAR
+    ====================================== -->
+
+    <div th:replace="~{fragments/sidebar :: sidebar}">
+    </div>
+
+    <!-- =====================================
+         CONTENIDO PRINCIPAL
+    ====================================== -->
+
+    <main class="main-content">
+
+        <!-- =====================================
+             CONTENIDO
+        ====================================== -->
+        <main class="content" th:object="${mitarea}">
+
+            <!-- Encabezado y navegación -->
+            <div>
+
+                <small class="text-muted">
+                    Tareas / Mi tarea
+                </small>
+
+                <h4 th:text="*{tarea}" class="fw-bold mt-1">
+                    Estudiar Spring Security
+                </h4>
+
+                <p th:text="*{descripcion}" class="text-muted mb-0">
+                    Administra y realiza seguimiento de tus tareas.
+                </p>
+
+            </div>
+
+
+            <!-- =====================================
+                 RESUMEN DE LA TAREA
+            ====================================== -->
+
+            <div class="row g-3 mb-4">
+
+                <!-- Fecha de inicio -->
+
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="detail-info-card">
+
+                        <div class="info-icon blue">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+
+                        <div>
+                            <span class="info-label">Fecha de inicio</span>
+                            <h6 th:text="*{fechainicio}">01 Oct 2026</h6>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- Fecha de fin -->
+
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="detail-info-card">
+
+                        <div class="info-icon purple">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+
+                        <div>
+                            <span class="info-label">Fecha de finalización</span>
+                            <h6 th:text="*{fechaFin}">10 Oct 2026</h6>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="detail-info-card">
+
+                        <div class="info-icon green">
+                            <i class="bi bi-activity"></i>
+                        </div>
+
+                        <div>
+                            <span class="info-label">Estado actual</span>
+                            <h6 th:text="*{estado}">
+                                <span class="status-badge in-progress">
+                                    En progreso
+                                </span>
+                            </h6>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Días cumplidos -->
+
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="detail-info-card">
+
+                        <div class="info-icon orange">
+                            <i class="bi bi-check2-circle"></i>
+                        </div>
+
+                        <div>
+                            <span class="info-label">Días realizados</span>
+                            <h6 id="daysCompleted">
+                                <span th:text="*{diasRealizados}"></span>
+                                de
+                                <span th:text="*{cantidadDias}"></span>
+                                días
+                            </h6>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Mensaje de error -->
+            <div th:if="${errorSeguimiento}"
+                 class="alert alert-warning alert-dismissible fade show"
+                 role="alert">
+
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+                <span th:text="${errorSeguimiento}">
+                    No puedes cambiar el estado de una fecha futura.
+                </span>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Cerrar">
+                </button>
+            </div>
+
+
+            <section class="detail-panel mb-4">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h5>Progreso de la tarea</h5>
+                        <p>Resumen de tu cumplimiento diario.</p>
+                    </div>
+
+                    <span class="progress-percentage" th:text="${mitarea.progreso + '%'}">
+                        0%
+                    </span>
+
+                </div>
+
+                <div class="progress detail-progress"
+                     role="progressbar"
+                     aria-label="Progreso de la tarea"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     th:attr="aria-valuenow=${mitarea.progreso}">
+
+                    <div class="progress-bar" th:style="'width: ' + ${mitarea.progreso} + '%'"></div>
+
+                </div>
+
+                <div class="progress-legend">
+                    <span>
+                        <span class="legend-dot completed-dot"></span>
+                        Realizada
+                    </span>
+
+                    <span>
+                        <span class="legend-dot pending-dot"></span>
+                        Pendiente
+                    </span>
+                </div>
+
+            </section>
+
+            <section class="detail-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h5>Seguimiento diario</h5>
+                        <p>
+                            Selecciona si cumpliste la tarea en cada fecha.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="tracking-legend mb-3">
+
+                    <span>
+                        <span class="legend-dot completed-dot"></span>
+                        Realizada
+                    </span>
+
+                    <span>
+                        <span class="legend-dot not-completed-dot"></span>
+                        No realizada
+                    </span>
+
+                    <span>
+                        <span class="legend-dot pending-dot"></span>
+                        Sin registrar
+                    </span>
+
+                </div>
+
+                <!-- Lista de días -->
+
+                <div class="tracking-list" id="trackingList">
+
+                    <div class="tracking-row" th:each="fec : ${listaDeFechas.content}">
+                        <div class="tracking-date">
+
+                            <span class="day-number" th:text="${#temporals.format(fec.fecha, 'dd')}">
+                                01
+                            </span>
+
+                            <div>
+                                <strong th:text="${#temporals.format(fec.fecha, 'EEEE')}">jueves</strong>
+                                <small th:text="${#temporals.format(fec.fecha, 'MMMM yyyy')}">octubre 2026</small>
+                            </div>
+
+                        </div>
+
+                        <div class="tracking-state" data-state th:text="${fec.estado}">
+                            Sin registrar
+                        </div>
+
+                        <div class="tracking-actions">
+                            <form method="post"
+                                  th:action="@{/seguimiento/{id}/estado(id=${fec.id})}">
+
+                                <input type="hidden"
+                                       name="page"
+                                       th:value="${currentPage}">
+
+                                <button type="submit"
+                                        name="estado"
+                                        value="CUMPLIDA"
+                                        class="btn btn-sm btn-mark-done"
+                                        th:disabled="${fec.fecha.isAfter(T(java.time.LocalDate).now())}">
+                                    Sí, la hice
+                                </button>
+
+                                <button type="submit"
+                                        name="estado"
+                                        value="NOCUMPLIDA"
+                                        class="btn btn-sm btn-mark-no"
+                                        th:disabled="${fec.fecha.isAfter(T(java.time.LocalDate).now())}">
+                                    No la hice
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- =====================================
+                     PAGINACIÓN
+                ====================================== -->
+                <nav th:if="${listaDeFechas.totalPages > 1}"
+                     aria-label="Paginación del seguimiento diario"
+                     class="mt-4">
+
+                    <ul class="pagination justify-content-center flex-wrap">
+
+
+                        <!-- Botón ANTERIOR -->
+                        <li class="page-item"
+                            th:classappend="${listaDeFechas.first} ? 'disabled'">
+
+                            <a class="page-link"
+                               th:href="@{/detalle-tarea/{id}(
+                                   id=${mitarea.id},
+                                   page=${listaDeFechas.number - 1}
+                               )}"
+                               aria-label="Página anterior">
+
+                                <i class="bi bi-chevron-left"></i>
+                                Anterior
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- NÚMEROS DE PÁGINA -->
+                        <li class="page-item"
+                            th:each="numero : ${#numbers.sequence(0, listaDeFechas.totalPages - 1)}"
+                            th:classappend="${numero == listaDeFechas.number} ? 'active'">
+
+                            <a class="page-link"
+                               th:href="@{/detalle-tarea/{id}(
+                                   id=${mitarea.id},
+                                   page=${numero}
+                               )}"
+                               th:text="${numero + 1}"
+                               th:attr="aria-current=${numero == listaDeFechas.number ? 'page' : null}">
+
+                                1
+
+                            </a>
+
+                        </li>
+
+
+                        <!-- Botón SIGUIENTE -->
+                        <li class="page-item"
+                            th:classappend="${listaDeFechas.last} ? 'disabled'">
+
+                            <a class="page-link"
+                               th:href="@{/detalle-tarea/{id}(
+                                   id=${mitarea.id},
+                                   page=${listaDeFechas.number + 1}
+                               )}"
+                               aria-label="Página siguiente">
+
+                                Siguiente
+                                <i class="bi bi-chevron-right"></i>
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+
+                    <!-- Información de la página actual -->
+                    <p class="pagination-info">
+
+                        Página
+                        <span th:text="${listaDeFechas.number + 1}">1</span>
+
+                        de
+
+                        <span th:text="${listaDeFechas.totalPages}">1</span>
+
+                        · Total de registros:
+                        <span th:text="${listaDeFechas.totalElements}">10</span>
+
+                    </p>
+
+                </nav>
+
+
+                <!-- Mensaje cuando no existen registros -->
+                <div th:if="${listaDeFechas.empty}"
+                     class="alert alert-light text-center mt-3">
+
+                    <i class="bi bi-calendar-x"></i>
+
+                    No hay fechas de seguimiento para esta tarea.
+
+                </div>
+
+
+            </section>
+
+        </main>
+
+    </main>
+
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
