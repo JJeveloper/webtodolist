@@ -2,6 +2,7 @@ package com.todolist.webtodolist.repository;
 
 import com.todolist.webtodolist.model.dto.AdministrarTareaDTO;
 import com.todolist.webtodolist.model.dto.ListarMisTareasDTO;
+import com.todolist.webtodolist.model.dto.ListarTareasPublicasDTO;
 import com.todolist.webtodolist.model.entity.Tarea;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,5 +25,11 @@ public interface TareaRepository extends JpaRepository<Tarea, Integer> {
                     FROM Tarea t WHERE t.usuario.id = :idUsuario AND t.id = :idTarea
             """)
     AdministrarTareaDTO administarMiTarea(@Param("idUsuario") Integer idUsuario, @Param("idTarea") Integer idTarea);
+
+    @Query("""
+                    SELECT NEW com.todolist.webtodolist.model.dto.ListarTareasPublicasDTO(t.id, t.tarea, t.descripcion, t.visibilidad, t.fechainicio, t.fechafin, u.nombres)
+                    FROM Tarea t JOIN t.usuario u WHERE t.visibilidad = "PUBLICA"
+            """)
+    Page<ListarTareasPublicasDTO> tareasPublicas(Pageable pageable);
 
 }

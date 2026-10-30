@@ -1109,3 +1109,23 @@ body {
 
     padding: 8px 10px;
 }
+
+/* Autor de la tarea */
+.task-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    color: #8a8f98;
+    font-size: 13px;
+}
+
+.task-author i {
+    font-size: 16px;
+    color: #7928ca;
+}
+
+.task-author strong {
+    color: #495057;
+    font-weight: 600;
+}

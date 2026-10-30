@@ -3,6 +3,7 @@ package com.todolist.webtodolist.service.impl;
 import com.todolist.webtodolist.exception.ValidarRangoFechas;
 import com.todolist.webtodolist.model.dto.AdministrarTareaDTO;
 import com.todolist.webtodolist.model.dto.ListarMisTareasDTO;
+import com.todolist.webtodolist.model.dto.ListarTareasPublicasDTO;
 import com.todolist.webtodolist.model.dto.RegistrarTareaDTO;
 import com.todolist.webtodolist.model.entity.*;
 import com.todolist.webtodolist.repository.SeguimientoTareaRepository;
@@ -94,7 +95,7 @@ public class TareaServiceImpl implements TareaService {
             Integer diasCompletados = seguimientoTareaRepository.findBySeguimientoTareaDiasCompletados(tarea.getId());
 
             // Calcular progreso
-            int progreso = calcularProgresoListaPage(tarea, diasCompletados);
+            int progreso = calcularProgresoListaPage(tarea.getFechainicio(), tarea.getFechaFin(), diasCompletados);
 
             tarea.setProgreso(progreso);
 
@@ -164,6 +165,35 @@ public class TareaServiceImpl implements TareaService {
 
     }
 
+    @Override
+    public Page<ListarTareasPublicasDTO> mostrarTodasLasTareasPublicas(Pageable pageable) {
+
+        Page<ListarTareasPublicasDTO> tareas = tareaRepository.tareasPublicas(pageable);
+
+        for (ListarTareasPublicasDTO tarea : tareas) {
+
+            // Buscar seguimientos de esta tarea
+            Integer diasCompletados = seguimientoTareaRepository.findBySeguimientoTareaDiasCompletados(tarea.getId());
+
+            // Calcular progreso
+            int progreso = calcularProgresoListaPage(tarea.getFechainicio(), tarea.getFechaFin(), diasCompletados);
+
+            tarea.setProgreso(progreso);
+
+            //tarea.setEstado("PENDIENTE");
+
+            if (progreso == 0) {
+                tarea.setEstado("PENDIENTE");
+            } else if (progreso == 100) {
+                tarea.setEstado("COMPLETADA");
+            } else {
+                tarea.setEstado("EN_PROGRESO");
+            }
+        }
+
+        return tareas;
+    }
+
     private int calcularProgreso(AdministrarTareaDTO tarea, Integer diasCompletados) {
 
         long cantidadDiasParaRealizarTarea = ChronoUnit.DAYS.between(tarea.getFechainicio(), tarea.getFechaFin()) + 1;
@@ -178,9 +208,9 @@ public class TareaServiceImpl implements TareaService {
         return Math.min(progreso, 100);
     }
 
-    private int calcularProgresoListaPage(ListarMisTareasDTO tarea, Integer diasCompletados) {
+    private int calcularProgresoListaPage(LocalDate fechaInicio, LocalDate fechaFin, Integer diasCompletados) {
 
-        long cantidadDiasParaRealizarTarea = ChronoUnit.DAYS.between(tarea.getFechainicio(), tarea.getFechaFin()) + 1;
+        long cantidadDiasParaRealizarTarea = ChronoUnit.DAYS.between(fechaInicio, fechaFin) + 1;
 
         // Evitar división por cero si la tarea empieza y termina el mismo día
         if (cantidadDiasParaRealizarTarea <= 0) {

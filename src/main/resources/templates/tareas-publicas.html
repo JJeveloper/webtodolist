@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tareas Publicas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <!-- =====================================
+         SIDEBAR
+    ====================================== -->
+
+    <div th:replace="~{fragments/sidebar :: sidebar}">
+    </div>
+
+    <!-- =====================================
+         CONTENIDO PRINCIPAL
+    ====================================== -->
+
+    <div class="main-content">
+
+        <!-- =====================================
+             CONTENIDO
+        ====================================== -->
+
+        <main class="content">
+
+            <div class="page-header">
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+
+                        <p class="text-muted mb-0">
+                            Todas las tareas publicas.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 LISTA DE TAREAS
+            ====================================== -->
+
+            <div class="row g-4">
+
+                <!-- =====================================
+                     TAREA
+                ====================================== -->
+
+                <div class="col-xl-4 col-lg-6"
+                     th:each="tarea : ${tarea}">
+
+
+                    <div class="task-card">
+
+
+                        <!-- CABECERA -->
+
+                        <div class="task-header">
+
+
+                            <div class="task-title-container">
+
+
+                                <div class="task-icon">
+
+                                    <i class="bi bi-book"></i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <h5 class="task-title"
+                                        th:text="${tarea.tarea}">
+
+                                        Estudiar Spring Security
+
+                                    </h5>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- VISIBILIDAD -->
+
+                            <span class="task-badge private"
+                                  th:if="${tarea.visibilidad.name() == 'PRIVADA'}">
+
+                                <i class="bi bi-lock-fill"></i>
+
+                                Privada
+
+                            </span>
+
+
+                            <span class="task-badge public"
+                                  th:if="${tarea.visibilidad.name() == 'PUBLICA'}">
+
+                                <i class="bi bi-globe2"></i>
+
+                                Pública
+
+                            </span>
+
+                        </div>
+
+                        <!-- DESCRIPCIÓN -->
+
+                        <p class="task-description"
+                           th:text="${tarea.descripcion}">
+
+                            Terminar el módulo de autenticación JWT
+
+                        </p>
+
+
+                        <!-- FECHAS -->
+
+                        <div class="task-dates">
+
+
+                            <div class="task-date">
+
+                                <i class="bi bi-calendar-event"></i>
+
+                                <div>
+
+                                    <small>
+                                        Inicio
+                                    </small>
+
+                                    <span th:text="${tarea.fechainicio}">
+                                        01 Oct 2026
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="task-date">
+
+                                <i class="bi bi-calendar-check"></i>
+
+                                <div>
+
+                                    <small> Fin
+                                    </small>
+
+                                    <span th:text="${tarea.fechaFin}">
+                                        10 Oct 2026
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PROGRESO -->
+
+                        <div class="task-progress">
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Progreso</span>
+                                <strong th:text="${tarea.progreso + '%'}">70%</strong>
+                            </div>
+
+                            <div class="progress">
+
+                                <div class="progress-bar"
+                                     role="progressbar"
+                                     th:style="'width:' + ${tarea.progreso} + '%;'"
+
+                                     th:aria-valuenow="${tarea.progreso}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+
+                                </div>
+
+                            </div>
+
+                            <div class="task-author">
+
+                                <i class="bi bi-person-circle"></i>
+                                <span>
+                                    Publicada por:
+                                    <strong th:text="${tarea.nombres}">
+                                        nombre_usuario
+                                    </strong>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

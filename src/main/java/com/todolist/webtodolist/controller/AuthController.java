@@ -11,9 +11,9 @@ public class AuthController {
         return "login";
     }
 
-    @GetMapping("/dashboard")
+    @GetMapping("/tareaspublicas")
     public String dashboard() {
-        return "dashboard";
+        return "redirect:/tareas/publicas";
     }
 
 

@@ -1,9 +1,6 @@
 package com.todolist.webtodolist.controller;
 
-import com.todolist.webtodolist.model.dto.AdministrarTareaDTO;
-import com.todolist.webtodolist.model.dto.ListarMisTareasDTO;
-import com.todolist.webtodolist.model.dto.RegistrarTareaDTO;
-import com.todolist.webtodolist.model.dto.SeguimientoTareaDTO;
+import com.todolist.webtodolist.model.dto.*;
 import com.todolist.webtodolist.model.entity.Estado;
 import com.todolist.webtodolist.service.interfaces.SeguimientoTareaService;
 import com.todolist.webtodolist.service.interfaces.TareaService;
@@ -31,7 +28,6 @@ public class TareasController {
     private final TareaService tareaService;
     private final SeguimientoTareaService seguimientoTareaService;
 
-
     public TareasController(TareaService tareaService, SeguimientoTareaService seguimientoTareaService) {
         this.tareaService = tareaService;
         this.seguimientoTareaService = seguimientoTareaService;
@@ -51,9 +47,6 @@ public class TareasController {
                                RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach((error) -> {
-                System.out.println(error.getDefaultMessage());
-            });
             return "formulario-agregartarea";
         }
 
@@ -83,8 +76,8 @@ public class TareasController {
 
     @GetMapping("/detalle-tarea/{id}")
     public String detalletarea(@PathVariable("id") Integer id,
-                          @RequestParam(defaultValue = "0") int page,
-                          Model model) {
+                               @RequestParam(defaultValue = "0") int page,
+                               Model model) {
 
         Pageable pageable = PageRequest.of(page, 5);
 
@@ -103,7 +96,7 @@ public class TareasController {
 
     @PostMapping("/seguimiento/{id}/estado")
     public String actualizarEstado(@PathVariable Integer id, @RequestParam Estado estado,
-            @RequestParam(defaultValue = "0") int page, RedirectAttributes redirectAttributes) {
+                                   @RequestParam(defaultValue = "0") int page, RedirectAttributes redirectAttributes) {
 
         Map<String, Integer> idTarea = seguimientoTareaService.controlDiasTarea(id, estado);
 
@@ -129,38 +122,29 @@ public class TareasController {
     @PostMapping("/eliminar-tarea/{id}")
     public String eliminarTarea(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
 
+        tareaService.eliminarTarea(id);
 
-        try {
-            tareaService.eliminarTarea(id);
-
-            redirectAttributes.addFlashAttribute(
-                    "successDelete",
-                    "Tarea eliminada correctamente."
-            );
-
-        } catch (AccessDeniedException e) {
-
-            redirectAttributes.addFlashAttribute(
-                    "errorDelete",
-                    "No tienes permiso para eliminar esta tarea."
-            );
-
-        } catch (EntityNotFoundException e) {
-
-            redirectAttributes.addFlashAttribute(
-                    "errorDelete",
-                    "La tarea que intentas eliminar no existe."
-            );
-
-        } catch (DataIntegrityViolationException e) {
-
-            redirectAttributes.addFlashAttribute(
-                    "errorDelete",
-                    "No se puede eliminar la tarea porque tiene registros relacionados."
-            );
-        }
+        redirectAttributes.addFlashAttribute(
+                "successDelete",
+                "Tarea eliminada correctamente."
+        );
 
         return "redirect:/mostrarmistareas";
+    }
+
+    @GetMapping("/tareas/publicas")
+    public String mostrasLasTareas(@RequestParam(defaultValue = "0") int page, Model model) {
+
+        Pageable pageable = PageRequest.of(page, 20);
+
+        Page<ListarTareasPublicasDTO> lista = tareaService.mostrarTodasLasTareasPublicas(pageable);
+
+        model.addAttribute("tarea", lista);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", lista.getTotalPages());
+
+        return "tareas-publicas";
+
     }
 
 }
